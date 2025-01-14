@@ -23,19 +23,13 @@ public class ArticleController {
     @GetMapping
     public ResponseEntity<List<Article>> getAllArticles() {
         List<Article> articles = articleRepository.findAll();
-        if ((articles).isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(articles);
+        return articles.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(articles);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
         Article article = articleRepository.findById(id).orElse(null);
-        if (article == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(article);
+        return article == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(article);
     }
 
     @PostMapping
@@ -48,29 +42,47 @@ public class ArticleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article articleDetails) {
-
         Article article = articleRepository.findById(id).orElse(null);
-        if (article == null) {
-            return ResponseEntity.notFound().build();
-        }
+        return article == null ? ResponseEntity.notFound().build() :
+                ResponseEntity.ok(articleRepository.save(updateArticleDetails(article, articleDetails)));
+    }
 
+    private Article updateArticleDetails(Article article, Article articleDetails) {
         article.setTitle(articleDetails.getTitle());
         article.setContent(articleDetails.getContent());
         article.setUpdatedAt(LocalDateTime.now());
-
-        Article updatedArticle = articleRepository.save(article);
-        return ResponseEntity.ok(updatedArticle);
+        return article;
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
-
         Article article = articleRepository.findById(id).orElse(null);
-        if (article == null) {
-            return ResponseEntity.notFound().build();
-        }
+        return article == null ? ResponseEntity.notFound().build() :
+                ResponseEntity.noContent().build();
+    }
 
-        articleRepository.delete(article);
-        return ResponseEntity.noContent().build();
+    @GetMapping("/search-title")
+    public ResponseEntity<List<Article>> getArticlesByTitle(@RequestParam String searchTerms) {
+        List<Article> articles = articleRepository.findByTitle(searchTerms);
+        return articles.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(articles);
+    }
+
+    @GetMapping("/search-content")
+    public ResponseEntity<List<Article>> getArticlesByContent(@RequestParam String keyword) {
+        List<Article> articles = articleRepository.findByContentContaining(keyword);
+        return articles.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(articles);
+    }
+
+    @GetMapping("/created-after")
+    public ResponseEntity<List<Article>> getArticlesCreateAfter(@RequestParam String date) {
+        LocalDateTime parsedDate = LocalDateTime.parse(date);
+        List<Article> articles = articleRepository.findByCreatedAtAfter(parsedDate);
+        return articles.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(articles);
+    }
+
+    @GetMapping("/last-five")
+    public ResponseEntity<List<Article>> getFiveLastArticles() {
+        List<Article> articles = articleRepository.findTop5ByOrderByCreatedAtDesc();
+        return articles.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(articles);
     }
 }

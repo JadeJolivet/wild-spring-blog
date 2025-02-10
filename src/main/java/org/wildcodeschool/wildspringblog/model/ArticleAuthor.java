@@ -2,9 +2,6 @@ package org.wildcodeschool.wildspringblog.model;
 
 import jakarta.persistence.*;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Entity
 public class ArticleAuthor {
     @Id
@@ -18,6 +15,7 @@ public class ArticleAuthor {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;
+
 
     @Column(nullable = false, length = 50)
     private String contribution;
@@ -52,13 +50,5 @@ public class ArticleAuthor {
 
     public void setContribution(String contribution) {
         this.contribution = contribution;
-    }
-
-    public List<Author> getAuthors() {
-        return List.of(author);
-    }
-
-    public List<Article> getArticles() {
-        return List.of(article);
     }
 }

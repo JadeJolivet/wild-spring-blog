@@ -1,39 +1,45 @@
 package org.wildcodeschool.wildspringblog.model;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
 public class Author {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String firstName;
+    @Column(nullable = false, length = 50)
+    private String firstname;
 
-    @Column(nullable = false)
-    private String lastName;
+    @Column(nullable = false, length = 50)
+    private String lastname;
 
     @OneToMany(mappedBy = "author")
     private List<ArticleAuthor> articleAuthors;
 
-    public String getLastName() {
-        return lastName;
+    public List<ArticleAuthor> getArticleAuthors() {
+        return articleAuthors;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setArticleAuthors(List<ArticleAuthor> articleAuthors) {
+        this.articleAuthors = articleAuthors;
+    }
+
+    public String getLastName() {
+        return lastname;
+    }
+
+    public void setLastName(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getFirstName() {
-        return firstName;
+        return firstname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String firstname) {
+        this.firstname = firstname;
     }
 
     public Long getId() {
@@ -44,19 +50,4 @@ public class Author {
         this.id = id;
     }
 
-    public List<ArticleAuthor> getArticleAuthors() {
-        return articleAuthors;
-    }
-
-    public void setArticleAuthors(List<ArticleAuthor> articleAuthors) {
-        this.articleAuthors = articleAuthors;
-    }
-
-    public String getFirstname() {
-        return firstName;
-    }
-
-    public String getLastname() {
-        return lastName;
-    }
 }

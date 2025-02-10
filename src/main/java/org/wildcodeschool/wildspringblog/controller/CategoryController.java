@@ -10,7 +10,6 @@ import org.wildcodeschool.wildspringblog.model.Category;
 import org.wildcodeschool.wildspringblog.repository.CategoryRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -65,6 +64,7 @@ public class CategoryController {
         if (category == null) {
             return ResponseEntity.notFound().build();
         }
+
         categoryRepository.delete(category);
         return ResponseEntity.noContent().build();
     }
@@ -86,5 +86,4 @@ public class CategoryController {
         }
         return categoryDTO;
     }
-
 }

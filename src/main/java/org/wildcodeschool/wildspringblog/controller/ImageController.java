@@ -25,7 +25,7 @@ public class ImageController {
 
     @GetMapping
     public ResponseEntity<List<ImageDTO>> getAllImages() {
-        List<Image> images = imageRepository.findAll();
+        List<Image> images = (List<Image>) imageRepository.findAll();
         if (images.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

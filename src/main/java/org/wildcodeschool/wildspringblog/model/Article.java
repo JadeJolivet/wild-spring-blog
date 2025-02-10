@@ -3,6 +3,7 @@ package org.wildcodeschool.wildspringblog.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -35,6 +36,9 @@ public class Article {
             inverseJoinColumns = @JoinColumn(name = "image_id")
     )
     private List<Image> images;
+
+    @OneToMany(mappedBy = "article")
+    private List<ArticleAuthor> articleAuthors;
 
     public Long getId() {
         return id;
@@ -90,5 +94,13 @@ public class Article {
 
     public void setImages(List<Image> images) {
         this.images = images;
+    }
+
+    public List<ArticleAuthor> getArticleAuthors() {
+        return articleAuthors;
+    }
+
+    public void setArticleAuthors(List<ArticleAuthor> articleAuthors) {
+        this.articleAuthors = articleAuthors;
     }
 }
